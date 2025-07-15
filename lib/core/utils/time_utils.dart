@@ -4,8 +4,8 @@ class TimeUtils {
     return '02:15'; // Заглушка
   }
 
-  // TODO: Реализовать определение дня (будни/выходные)
   static bool isWeekend(DateTime date) {
-    return false;
+    final weekday = date.weekday;
+    return weekday == DateTime.saturday || weekday == DateTime.sunday;
   }
 }
