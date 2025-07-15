@@ -1,6 +1,37 @@
 import 'package:flutter/cupertino.dart';
 
 class TimeUtils {
+  static List<String> getNextTrainTimes({
+    required Map<String, List<String>> schedule,
+    required String direction,
+    required DateTime currentTime,
+    int count = 3,
+  }) {
+    final times = schedule[direction] ?? [];
+    final currentTimeStr = _formatTime(currentTime);
+
+    final nextTrains = times.where((time) => time.compareTo(currentTimeStr) >= 0);
+
+    return nextTrains.take(count).toList();
+  }
+
+  static String _formatTime(DateTime time) {
+    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+  }
+
+  static String formatTimeLeft(DateTime now, String trainTime) {
+    final trainDateTime = DateTime(now.year, now.month, now.day,
+        int.parse(trainTime.split(':')[0]), int.parse(trainTime.split(':')[1]));
+
+    final difference = trainDateTime.difference(now);
+
+    if (difference.isNegative) {
+      return '00:00';
+    }
+
+    return '${difference.inMinutes.toString().padLeft(2, '0')}:${(difference.inSeconds % 60).toString().padLeft(2, '0')}';
+  }
+
   static String calculateTimeLeft(DateTime now, String trainTime) {
     try {
       final trainMinutes = _parseAndConvertTimeToMinutes(trainTime);
