@@ -1,4 +1,3 @@
-// Модель для хранения расписания
 class StationSchedule {
   final String stationName;
   final Map<String, List<String>> weekdays;
@@ -10,5 +9,11 @@ class StationSchedule {
     required this.weekends,
   });
 
-// TODO: Добавить методы преобразования времени
+  factory StationSchedule.fromJson(String name, Map<String, dynamic> json) {
+    return StationSchedule(
+      stationName: name,
+      weekdays: Map<String, List<String>>.from(json['weekdays'] ?? {}),
+      weekends: Map<String, List<String>>.from(json['weekends'] ?? {}),
+    );
+  }
 }

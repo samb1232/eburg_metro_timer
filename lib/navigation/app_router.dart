@@ -9,7 +9,7 @@ class AppRouter {
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
-          body: Center(child: Text('Нет маршрута для ${settings.name}')),
+          body: Center(child: Text('Нет рута для ${settings.name}')),
         )
         );
     }
