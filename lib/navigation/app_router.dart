@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../features/timer/presentation/timer_screen.dart';
+import '../features/timer_screen/presentation/timer_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
