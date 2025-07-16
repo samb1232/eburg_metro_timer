@@ -4,7 +4,7 @@ import '../features/timer/presentation/timer_screen.dart';
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case '/timer':
+      case '/':
         return MaterialPageRoute(builder: (_) => const TimerScreen());
       default:
         return MaterialPageRoute(

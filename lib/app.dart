@@ -24,7 +24,7 @@ class MetroTimerApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         onGenerateRoute: AppRouter.generateRoute,
-        initialRoute: '/timer',
+        initialRoute: '/',
       ),
     );
   }
