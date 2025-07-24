@@ -5,8 +5,8 @@ class ChosenStationDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // @todo #2:30min We should use actual values instead of placeholders.
     return Column(
+      // @todo #2:30mxin We should use actual values instead of placeholders.
       children: [
         Text('Уралмаш', style: Theme.of(context).textTheme.headlineLarge),
         Text('В строну м. Ботаническая', style: Theme.of(context).textTheme.labelSmall),
