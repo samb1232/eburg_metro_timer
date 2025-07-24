@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../../data/models/schedule_model.dart';
+import '../../data/models/station_schedule.dart';
 import '../../data/repositories/schedule_repository.dart';
 
 class ScheduleProvider with ChangeNotifier {

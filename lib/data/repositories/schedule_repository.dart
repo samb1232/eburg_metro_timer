@@ -1,5 +1,5 @@
 import '../datasources/local_data_source.dart';
-import '../models/schedule_model.dart';
+import '../models/station_schedule.dart';
 
 class ScheduleRepository {
   final LocalDataSource _localDataSource;
