@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../navigation/app_router.dart';
+
 class NavButtonsDisplay extends StatelessWidget {
   const NavButtonsDisplay({super.key});
 
@@ -11,11 +13,11 @@ class NavButtonsDisplay extends StatelessWidget {
       children: [
         IconButton(
           icon: const Icon(Icons.train),
-          onPressed: () => Navigator.pushNamed(context, '/station_picker'),
+          onPressed: () => Navigator.pushNamed(context, AppRouter.chooseStationRoot),
         ),
         IconButton(
           icon: const Icon(Icons.settings),
-          onPressed: () => Navigator.pushNamed(context, '/settings'),
+          onPressed: () => Navigator.pushNamed(context, AppRouter.settingsRoot),
         ),
       ],
     );
