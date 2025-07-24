@@ -5,6 +5,7 @@ class NavButtonsDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // todo #5: replace todo buttons with something more useful
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [

@@ -9,6 +9,10 @@ class TimerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //
+    // @todo #1: change styles so chosen station display shold be on the top,
+    // timer display on the center and navigation buttons on the bottom
+    //
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
