@@ -12,9 +12,28 @@ class ScheduleProvider with ChangeNotifier {
   Map<String, StationSchedule> get schedules => _schedules;
   String? get selectedStation => _selectedStation;
 
+  bool _isLoading = false;
+  Exception? _loadError;
+
+  bool get isLoading => _isLoading;
+  Exception? get loadError => _loadError;
+
   Future<void> loadSchedules() async {
-    _schedules = await _repository.loadAllSchedules();
+    if (_isLoading) return; // Prevent multiple loads
+
+    _isLoading = true;
+    _loadError = null;
     notifyListeners();
+
+    try {
+      _schedules = await _repository.loadAllSchedules();
+    } catch (e) {
+      _loadError = e is Exception ? e : Exception('Failed to load schedules');
+      _schedules = {};
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void selectStation(String stationName) {

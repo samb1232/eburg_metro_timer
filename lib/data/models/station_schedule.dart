@@ -12,8 +12,20 @@ class StationSchedule {
   factory StationSchedule.fromJson(String name, Map<String, dynamic> json) {
     return StationSchedule(
       stationName: name,
-      weekdays: Map<String, List<String>>.from(json['weekdays'] ?? {}),
-      weekends: Map<String, List<String>>.from(json['weekends'] ?? {}),
+      weekdays: _convertScheduleMap(json['weekdays']),
+      weekends: _convertScheduleMap(json['weekends']),
     );
+  }
+
+  static Map<String, List<String>> _convertScheduleMap(dynamic data) {
+    if (data is! Map<String, dynamic>) return {};
+
+    final Map<String, List<String>> result = {};
+    data.forEach((key, value) {
+      if (value is List<dynamic>) {
+        result[key] = value.map((e) => e.toString()).toList();
+      }
+    });
+    return result;
   }
 }
