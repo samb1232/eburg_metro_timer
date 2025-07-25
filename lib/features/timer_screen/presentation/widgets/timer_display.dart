@@ -8,6 +8,7 @@ class TimerDisplay extends StatelessWidget {
     return Column(
       children: [
         // @todo #3: add real countdown timer instead of text placeholder
+        // @todo #9: display timer in style "2min15sec"
         Text(
           '02:15',
           style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 64),
