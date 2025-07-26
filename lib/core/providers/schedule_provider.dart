@@ -19,7 +19,7 @@ class ScheduleProvider with ChangeNotifier {
   Exception? get loadError => _loadError;
 
   Future<void> loadSchedules() async {
-    if (_isLoading) return; // Prevent multiple loads
+    if (_isLoading) return;
 
     _isLoading = true;
     _loadError = null;

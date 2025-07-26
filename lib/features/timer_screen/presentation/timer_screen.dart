@@ -17,11 +17,13 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   void initState() {
     super.initState();
-    final scheduleProvider = Provider.of<ScheduleProvider>(
-      context,
-      listen: false,
-    );
-    scheduleProvider.loadSchedules();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final scheduleProvider = Provider.of<ScheduleProvider>(
+        context,
+        listen: false,
+      );
+      scheduleProvider.loadSchedules();
+    });
   }
   @override
   Widget build(BuildContext context) {

@@ -2,23 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/providers/schedule_provider.dart';
 
-class ChooseStationScreen extends StatefulWidget {
+class ChooseStationScreen extends StatelessWidget {
   const ChooseStationScreen({super.key});
-
-  @override
-  State<ChooseStationScreen> createState() => _ChooseStationScreenState();
-}
-
-class _ChooseStationScreenState extends State<ChooseStationScreen> {
-  @override
-  void initState() {
-    super.initState();
-    final scheduleProvider = Provider.of<ScheduleProvider>(
-      context,
-      listen: false,
-    );
-    scheduleProvider.loadSchedules();
-  }
 
   @override
   Widget build(BuildContext context) {
