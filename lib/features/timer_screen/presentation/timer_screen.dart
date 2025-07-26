@@ -34,8 +34,10 @@ class _TimerScreenState extends State<TimerScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ChosenStationDisplay(scheduleProvider.selectedStation),
+            const SizedBox(height: 20),
             const TimerDisplay(),
             const NextTrainTimeDisplay(),
+            const SizedBox(height: 100),
             const ChooseDirectionButtons(),
           ],
         ),
