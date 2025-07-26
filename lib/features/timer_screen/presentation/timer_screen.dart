@@ -1,20 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:metro_schedule/features/timer_screen/presentation/widgets/choose_direction_buttons.dart';
+import 'package:provider/provider.dart';
+import '../../../core/providers/schedule_provider.dart';
 import 'widgets/chosen_station_display.dart';
 import 'widgets/next_train_time_display.dart';
 import 'widgets/timer_display.dart';
 
-class TimerScreen extends StatelessWidget {
+class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
 
   @override
+  State<TimerScreen> createState() => _TimerScreenState();
+}
+
+class _TimerScreenState extends State<TimerScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final scheduleProvider = Provider.of<ScheduleProvider>(
+      context,
+      listen: false,
+    );
+    scheduleProvider.loadSchedules();
+  }
+  @override
   Widget build(BuildContext context) {
+    final scheduleProvider = Provider.of<ScheduleProvider>(context);
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const ChosenStationDisplay(),
+            ChosenStationDisplay(scheduleProvider.selectedStation),
             const TimerDisplay(),
             const NextTrainTimeDisplay(),
             const ChooseDirectionButtons(),
