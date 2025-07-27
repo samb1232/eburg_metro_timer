@@ -15,7 +15,6 @@ class ScheduleProvider with ChangeNotifier {
   static const String firstStationName = "Проспект космонавтов";
   static const String lastStationName = "Ботаническая";
 
-
   final ScheduleRepository _repository;
   ScheduleProvider(this._repository);
 
@@ -25,7 +24,7 @@ class ScheduleProvider with ChangeNotifier {
   String _selectedStation = firstStationName;
   String get selectedStation => _selectedStation;
 
-  TrainDirection _selectedDirection = TrainDirection.toFirst;
+  TrainDirection _selectedDirection = TrainDirection.toLast;
   TrainDirection get selectedDirection => _selectedDirection;
 
   bool _isLoading = false;
@@ -56,6 +55,13 @@ class ScheduleProvider with ChangeNotifier {
 
   void selectStation(String stationName) {
     _selectedStation = stationName;
+
+    if (stationName == firstStationName) {
+      _selectedDirection = TrainDirection.toLast;
+    } else if (stationName == lastStationName) {
+      _selectedDirection = TrainDirection.toFirst;
+    }
+
     notifyListeners();
   }
 
