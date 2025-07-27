@@ -2,21 +2,36 @@ import 'package:flutter/foundation.dart';
 import '../../data/models/station_schedule.dart';
 import '../../data/repositories/schedule_repository.dart';
 
+enum TrainDirection {
+  toFirst('to_first'),
+  toLast('to_last');
+
+  final String value;
+
+  const TrainDirection(this.value);
+}
+
 class ScheduleProvider with ChangeNotifier {
+  static const String firstStationName = "Проспект космонавтов";
+  static const String lastStationName = "Ботаническая";
+
+
   final ScheduleRepository _repository;
   ScheduleProvider(this._repository);
 
   Map<String, StationSchedule> _schedules = {};
   Map<String, StationSchedule> get schedules => _schedules;
 
-  String _selectedStation = "Ботаническая";
+  String _selectedStation = firstStationName;
   String get selectedStation => _selectedStation;
 
-  String _selectedDirection = "to_first";
-  String get selectedDirection => _selectedDirection;
+  TrainDirection _selectedDirection = TrainDirection.toFirst;
+  TrainDirection get selectedDirection => _selectedDirection;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
+
 
   Exception? _loadError;
   Exception? get loadError => _loadError;
@@ -44,7 +59,15 @@ class ScheduleProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void selectDirection(String direction) {
+  bool isDirectionAvailable(TrainDirection direction) {
+    if (_selectedStation == firstStationName) return direction != TrainDirection.toFirst;
+    if (_selectedStation == lastStationName) return direction != TrainDirection.toLast;
+    return true;
+  }
+
+  void selectDirection(TrainDirection direction) {
+    if (!isDirectionAvailable(direction)) return;
+
     _selectedDirection = direction;
     notifyListeners();
   }
