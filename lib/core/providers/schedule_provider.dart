@@ -1,15 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:metro_schedule/data/models/direction.dart';
 import '../../data/models/station_schedule.dart';
 import '../../data/repositories/schedule_repository.dart';
 
-enum TrainDirection {
-  toFirst('to_first'),
-  toLast('to_last');
-
-  final String value;
-
-  const TrainDirection(this.value);
-}
 
 class ScheduleProvider with ChangeNotifier {
   static const String firstStationName = "Проспект космонавтов";
@@ -24,8 +17,8 @@ class ScheduleProvider with ChangeNotifier {
   String _selectedStation = firstStationName;
   String get selectedStation => _selectedStation;
 
-  TrainDirection _selectedDirection = TrainDirection.toLast;
-  TrainDirection get selectedDirection => _selectedDirection;
+  Direction _selectedDirection = Direction.toLast;
+  Direction get selectedDirection => _selectedDirection;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -57,21 +50,21 @@ class ScheduleProvider with ChangeNotifier {
     _selectedStation = stationName;
 
     if (stationName == firstStationName) {
-      _selectedDirection = TrainDirection.toLast;
+      _selectedDirection = Direction.toLast;
     } else if (stationName == lastStationName) {
-      _selectedDirection = TrainDirection.toFirst;
+      _selectedDirection = Direction.toFirst;
     }
 
     notifyListeners();
   }
 
-  bool isDirectionAvailable(TrainDirection direction) {
-    if (_selectedStation == firstStationName) return direction != TrainDirection.toFirst;
-    if (_selectedStation == lastStationName) return direction != TrainDirection.toLast;
+  bool isDirectionAvailable(Direction direction) {
+    if (_selectedStation == firstStationName) return direction != Direction.toFirst;
+    if (_selectedStation == lastStationName) return direction != Direction.toLast;
     return true;
   }
 
-  void selectDirection(TrainDirection direction) {
+  void selectDirection(Direction direction) {
     if (!isDirectionAvailable(direction)) return;
 
     _selectedDirection = direction;

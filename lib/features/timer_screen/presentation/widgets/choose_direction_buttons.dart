@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:metro_schedule/data/models/direction.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/providers/schedule_provider.dart';
@@ -21,12 +22,12 @@ class ChooseDirectionButtons extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _DirectionButton(
-            direction: TrainDirection.toFirst,
+            direction: Direction.toFirst,
             label: 'На Пр. Космонавтов',
             provider: provider,
           ),
           _DirectionButton(
-            direction: TrainDirection.toLast,
+            direction: Direction.toLast,
             label: 'На ботанику',
             provider: provider,
           ),
@@ -37,7 +38,7 @@ class ChooseDirectionButtons extends StatelessWidget {
 }
 
 class _DirectionButton extends StatelessWidget {
-  final TrainDirection direction;
+  final Direction direction;
   final String label;
   final ScheduleProvider provider;
 
