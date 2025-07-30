@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:metro_schedule/core/utils/next_train_calculator.dart';
 import 'package:provider/provider.dart';
 import '../../../core/providers/schedule_provider.dart';
 import 'widgets/choose_direction_buttons.dart';
@@ -15,6 +16,7 @@ class TimerScreen extends StatefulWidget {
 
 class _TimerScreenState extends State<TimerScreen> {
   String? _nextTrainTime;
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +26,7 @@ class _TimerScreenState extends State<TimerScreen> {
         listen: false,
       );
       scheduleProvider.loadSchedules().then((_) {
-        _calculateNextTrainTime(scheduleProvider);
+        _updateNextTrainTime(scheduleProvider);
       });
     });
   }
@@ -33,47 +35,19 @@ class _TimerScreenState extends State<TimerScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final scheduleProvider = Provider.of<ScheduleProvider>(context);
-    _calculateNextTrainTime(scheduleProvider);
+    _updateNextTrainTime(scheduleProvider);
   }
 
-  void _calculateNextTrainTime(ScheduleProvider scheduleProvider) {
-    if (scheduleProvider.schedules.isEmpty) return;
+  void _updateNextTrainTime(ScheduleProvider scheduleProvider) {
+    final nextTime = NextTrainCalculator.calculateNextTrainTime(
+      scheduleProvider: scheduleProvider,
+      currentTime: TimeOfDay.now(),
+      isWeekend: DateTime.now().weekday >= DateTime.saturday,
+    );
 
-    final now = TimeOfDay.now();
-    final currentStation = scheduleProvider.selectedStation;
-    final currentDirection = scheduleProvider.selectedDirection;
-    final isWeekend = DateTime.now().weekday >= DateTime.saturday;
-
-    final stationSchedule = scheduleProvider.schedules[currentStation];
-    if (stationSchedule == null) return;
-
-    final schedule = isWeekend ? stationSchedule.weekends : stationSchedule.weekdays;
-    final directionKey = currentDirection.value;
-    final trainTimes = schedule[directionKey] ?? [];
-
-    String? nextTrainTime;
-    for (final timeStr in trainTimes) {
-      final timeParts = timeStr.split(':');
-      if (timeParts.length != 2) continue;
-
-      final hour = int.tryParse(timeParts[0]) ?? 0;
-      final minute = int.tryParse(timeParts[1]) ?? 0;
-      final trainTime = TimeOfDay(hour: hour, minute: minute);
-
-      if (trainTime.hour > now.hour ||
-          (trainTime.hour == now.hour && trainTime.minute >= now.minute)) {
-        nextTrainTime = timeStr;
-        break;
-      }
-    }
-    // If no train found today, take first train of the next day
-    if (nextTrainTime == null && trainTimes.isNotEmpty) {
-      nextTrainTime = trainTimes.first;
-    }
-
-    if (nextTrainTime != _nextTrainTime) {
+    if (nextTime != _nextTrainTime) {
       setState(() {
-        _nextTrainTime = nextTrainTime;
+        _nextTrainTime = nextTime;
       });
     }
   }
