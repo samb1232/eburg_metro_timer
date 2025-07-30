@@ -86,7 +86,11 @@ class _TimerDisplayState extends State<TimerDisplay> {
     final seconds = totalSeconds % 60;
 
     setState(() {
-      _countdownText = '$minutes мин ${seconds.toString().padLeft(2, '0')} сек';
+      if (totalSeconds < 60) {
+        _countdownText = '$seconds сек';
+      } else {
+        _countdownText = '$minutes мин ${seconds.toString().padLeft(2, '0')} сек';
+      }
     });
   }
 
