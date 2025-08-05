@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:metro_schedule/core/providers/schedule_provider.dart';
 import 'package:provider/provider.dart';
-import '../../../core/providers/schedule_provider.dart';
 
 class ChooseStationScreen extends StatelessWidget {
   const ChooseStationScreen({super.key});
@@ -21,22 +21,22 @@ class ChooseStationScreen extends StatelessWidget {
     }
 
     if (provider.loadError != null) {
-      return Center(child: Text('Error: ${provider.loadError}'));
+      return Center(child: Text('Ошибка: ${provider.loadError}'));
     }
 
-    final stations = provider.schedules.keys.toList();
-    if (stations.isEmpty) {
+    if (provider.stationOrder.isEmpty) {
       return const Center(child: Text('Нет доступных станций'));
     }
 
     return ListView.builder(
-      itemCount: stations.length,
+      itemCount: provider.stationOrder.length,
       itemBuilder: (context, index) {
-        final stationName = stations[index];
+        final stationNumber = provider.stationOrder[index];
+        final stationName = provider.getStationName(stationNumber);
         return ListTile(
           title: Text(stationName),
           onTap: () {
-            provider.selectStation(stationName);
+            provider.selectStation(stationNumber);
             Navigator.pop(context, stationName);
           },
         );

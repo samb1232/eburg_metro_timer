@@ -6,23 +6,38 @@ class ScheduleRepository {
 
   ScheduleRepository(this._localDataSource);
 
-  Future<Map<String, StationSchedule>> loadAllSchedules() async {
+  Future<Map<int, StationSchedule>> loadAllSchedules() async {
     final jsonData = await _localDataSource.loadJsonData();
-    return jsonData.map((stationName, data) => MapEntry(
-      stationName,
-      StationSchedule.fromJson(stationName, data),
-    ));
+    final stations = jsonData['stations'] as Map<String, dynamic>;
+    final stationOrder = List<int>.from(jsonData['station_order'] as List);
+
+    return Map.fromEntries(
+      stationOrder.map((stationNumber) {
+        final stationData = stations[stationNumber.toString()] as Map<String, dynamic>;
+        return MapEntry(
+          stationNumber,
+          StationSchedule.fromJson(stationNumber, stationData),
+        );
+      }),
+    );
   }
 
   Future<List<String>> getStationNames() async {
     final jsonData = await _localDataSource.loadJsonData();
-    return jsonData.keys.toList();
+    final stations = jsonData['stations'] as Map<String, dynamic>;
+    return stations.values
+        .map((station) => station['name'] as String)
+        .toList();
   }
 
-  Future<StationSchedule?> getSchedule(String stationName) async {
+  Future<StationSchedule?> getSchedule(int stationNumber) async {
     final jsonData = await _localDataSource.loadJsonData();
-    if (jsonData.containsKey(stationName)) {
-      return StationSchedule.fromJson(stationName, jsonData[stationName]);
+    final stations = jsonData['stations'] as Map<String, dynamic>;
+    if (stations.containsKey(stationNumber.toString())) {
+      return StationSchedule.fromJson(
+        stationNumber,
+        stations[stationNumber.toString()] as Map<String, dynamic>,
+      );
     }
     return null;
   }

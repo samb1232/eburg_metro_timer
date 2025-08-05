@@ -1,21 +1,18 @@
 import 'package:flutter/foundation.dart';
-import 'package:metro_schedule/data/models/direction.dart';
+import '../../data/models/direction.dart';
 import '../../data/models/station_schedule.dart';
 import '../../data/repositories/schedule_repository.dart';
 
 
 class ScheduleProvider with ChangeNotifier {
-  static const String firstStationName = "Проспект космонавтов";
-  static const String lastStationName = "Ботаническая";
-
   final ScheduleRepository _repository;
   ScheduleProvider(this._repository);
 
-  Map<String, StationSchedule> _schedules = {};
-  Map<String, StationSchedule> get schedules => _schedules;
+  Map<int, StationSchedule> _schedules = {};
+  Map<int, StationSchedule> get schedules => _schedules;
 
-  String _selectedStation = firstStationName;
-  String get selectedStation => _selectedStation;
+  int _selectedStationNumber = 1;
+  int get selectedStationNumber => _selectedStationNumber;
 
   Direction _selectedDirection = Direction.toLast;
   Direction get selectedDirection => _selectedDirection;
@@ -23,10 +20,11 @@ class ScheduleProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-
-
   Exception? _loadError;
   Exception? get loadError => _loadError;
+
+  List<int> _stationOrder = [];
+  List<int> get stationOrder => _stationOrder;
 
   Future<void> loadSchedules() async {
     if (_isLoading) return;
@@ -36,22 +34,25 @@ class ScheduleProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _schedules = await _repository.loadAllSchedules();
+      final jsonData = await _repository.loadAllSchedules();
+      _schedules = jsonData;
+      _stationOrder = _schedules.keys.toList()..sort();
     } catch (e) {
       _loadError = e is Exception ? e : Exception('Failed to load schedules');
       _schedules = {};
+      _stationOrder = [];
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  void selectStation(String stationName) {
-    _selectedStation = stationName;
+  void selectStation(int stationNumber) {
+    _selectedStationNumber = stationNumber;
 
-    if (stationName == firstStationName) {
+    if (stationNumber == _stationOrder.first) {
       _selectedDirection = Direction.toLast;
-    } else if (stationName == lastStationName) {
+    } else if (stationNumber == _stationOrder.last) {
       _selectedDirection = Direction.toFirst;
     }
 
@@ -59,8 +60,14 @@ class ScheduleProvider with ChangeNotifier {
   }
 
   bool isDirectionAvailable(Direction direction) {
-    if (_selectedStation == firstStationName) return direction != Direction.toFirst;
-    if (_selectedStation == lastStationName) return direction != Direction.toLast;
+    if (_stationOrder.isEmpty) return false;
+
+    if (_selectedStationNumber == _stationOrder.first) {
+      return direction != Direction.toFirst;
+    }
+    if (_selectedStationNumber == _stationOrder.last) {
+      return direction != Direction.toLast;
+    }
     return true;
   }
 
@@ -69,5 +76,20 @@ class ScheduleProvider with ChangeNotifier {
 
     _selectedDirection = direction;
     notifyListeners();
+  }
+
+  String getStationName(int stationNumber) {
+    return _schedules[stationNumber]?.stationName ?? 'Unknown Station';
+  }
+
+  String getSelectedStationName() {
+    return getStationName(_selectedStationNumber);
+  }
+
+  List<String>? getCurrentSchedule(bool isWeekend) {
+    return _schedules[_selectedStationNumber]?.getSchedule(
+      isWeekend,
+      _selectedDirection == Direction.toFirst ? 'to_first' : 'to_last',
+    );
   }
 }

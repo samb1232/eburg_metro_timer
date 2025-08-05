@@ -2,24 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:metro_schedule/navigation/app_router.dart';
 
 class ChosenStationDisplay extends StatelessWidget {
-  final String selectedStation;
+  final String stationName;
 
-  const ChosenStationDisplay(this.selectedStation, {super.key});
+  const ChosenStationDisplay({super.key, required this.stationName});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      //
-      // @todo #8: Add feature: If you click on station name,
-      //  you can choose another station from dropdown
-      //
       children: [
         ElevatedButton(
           onPressed: () {
             Navigator.pushNamed(context, AppRouter.chooseStationRoot);
           },
           child: Text(
-            selectedStation,
+            stationName,
             style: Theme.of(context).textTheme.headlineLarge,
           ),
         ),

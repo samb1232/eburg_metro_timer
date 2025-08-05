@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:metro_schedule/core/utils/next_train_calculator.dart';
 import 'package:provider/provider.dart';
 import '../../../core/providers/schedule_provider.dart';
 import 'widgets/choose_direction_buttons.dart';
@@ -15,7 +14,6 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  String? _nextTrainTime;
 
   @override
   void initState() {
@@ -25,33 +23,9 @@ class _TimerScreenState extends State<TimerScreen> {
         context,
         listen: false,
       );
-      scheduleProvider.loadSchedules().then((_) {
-        _updateNextTrainTime(scheduleProvider);
-      });
+      scheduleProvider.loadSchedules();
     });
   }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final scheduleProvider = Provider.of<ScheduleProvider>(context);
-    _updateNextTrainTime(scheduleProvider);
-  }
-
-  void _updateNextTrainTime(ScheduleProvider scheduleProvider) {
-    final nextTime = NextTrainCalculator.calculateNextTrainTime(
-      scheduleProvider: scheduleProvider,
-      currentTime: TimeOfDay.now(),
-      isWeekend: DateTime.now().weekday >= DateTime.saturday,
-    );
-
-    if (nextTime != _nextTrainTime) {
-      setState(() {
-        _nextTrainTime = nextTime;
-      });
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +35,11 @@ class _TimerScreenState extends State<TimerScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ChosenStationDisplay(scheduleProvider.selectedStation),
+            ChosenStationDisplay(
+              stationName: scheduleProvider.getStationName(scheduleProvider.selectedStationNumber),
+            ),
             const SizedBox(height: 20),
-            TimerDisplay(nextTrainTime: _nextTrainTime),
+            TimerDisplay(),
             const NextTrainTimeDisplay(),
             const SizedBox(height: 100),
             const ChooseDirectionButtons(),

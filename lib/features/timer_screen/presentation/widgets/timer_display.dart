@@ -1,106 +1,110 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:metro_schedule/core/providers/schedule_provider.dart';
+import 'package:metro_schedule/data/models/direction.dart';
+import 'package:provider/provider.dart';
+
 
 class TimerDisplay extends StatefulWidget {
-  final String? nextTrainTime;
-
-  const TimerDisplay({super.key, required this.nextTrainTime});
+  const TimerDisplay({super.key});
 
   @override
   State<TimerDisplay> createState() => _TimerDisplayState();
 }
 
 class _TimerDisplayState extends State<TimerDisplay> {
-  String _countdownText = '';
-  Timer? _timer;
+  Duration _timeRemaining = Duration.zero;
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    _startTimer();
-  }
-
-  @override
-  void didUpdateWidget(TimerDisplay oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.nextTrainTime != widget.nextTrainTime) {
-      _startTimer();
-    }
+    _timer = Timer.periodic(const Duration(milliseconds: 300), (_) => _updateTime());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateTime());
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _timer.cancel();
     super.dispose();
   }
 
-  void _startTimer() {
-    _timer?.cancel();
-    _updateCountdown();
+  void _updateTime() {
+    final provider = Provider.of<ScheduleProvider>(context, listen: false);
 
-    // Update every second
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      _updateCountdown();
-    });
-  }
-
-  void _updateCountdown() {
-    if (widget.nextTrainTime == null) {
-      setState(() {
-        _countdownText = 'Нет данных';
-      });
+    if (provider.stationOrder.isEmpty || provider.schedules.isEmpty) {
       return;
     }
 
     final now = DateTime.now();
-    final timeParts = widget.nextTrainTime!.split(':');
-    if (timeParts.length != 2) {
-      setState(() {
-        _countdownText = 'Неверный формат';
-      });
-      return;
-    }
+    final isWeekend = now.weekday >= DateTime.saturday;
+    final station = provider.schedules[provider.selectedStationNumber];
 
-    final hour = int.tryParse(timeParts[0]) ?? 0;
-    final minute = int.tryParse(timeParts[1]) ?? 0;
+    if (station == null) return;
 
-    var trainTime = DateTime(now.year, now.month, now.day, hour, minute);
+    final direction = provider.selectedDirection.value;
+    final schedule = station.getSchedule(isWeekend, direction) ?? [];
 
-    // If train time already passed today, use tomorrow's time
-    if (trainTime.isBefore(now)) {
-      trainTime = trainTime.add(const Duration(days: 1));
-    }
+    // Находим ближайшее время
+    String? nextTime;
+    for (final timeStr in schedule) {
+      final timeParts = timeStr.split(':');
+      if (timeParts.length != 2) continue;
 
-    final difference = trainTime.difference(now);
-    final totalSeconds = difference.inSeconds;
+      final hour = int.tryParse(timeParts[0]) ?? 0;
+      final minute = int.tryParse(timeParts[1]) ?? 0;
+      final trainTime = DateTime(now.year, now.month, now.day, hour, minute);
 
-    if (totalSeconds <= 0) {
-      setState(() {
-        _countdownText = 'Поезд прибывает';
-      });
-      return;
-    }
-
-    final minutes = (totalSeconds ~/ 60) % 60;
-    final seconds = totalSeconds % 60;
-
-    setState(() {
-      if (totalSeconds < 60) {
-        _countdownText = '$seconds сек';
-      } else {
-        _countdownText = '$minutes мин ${seconds.toString().padLeft(2, '0')} сек';
+      if (trainTime.isAfter(now)) {
+        nextTime = timeStr;
+        break;
       }
-    });
+    }
+
+    if (nextTime == null && schedule.isNotEmpty) {
+      nextTime = schedule.first;
+    }
+
+    if (nextTime != null) {
+      final timeParts = nextTime.split(':');
+      final hour = int.tryParse(timeParts[0]) ?? 0;
+      final minute = int.tryParse(timeParts[1]) ?? 0;
+
+      var trainTime = DateTime(now.year, now.month, now.day, hour, minute);
+      if (trainTime.isBefore(now)) {
+        trainTime = trainTime.add(const Duration(days: 1));
+      }
+
+      setState(() {
+        _timeRemaining = trainTime.difference(now);
+      });
+    }
+  }
+
+  String _formatDuration(Duration duration) {
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes.remainder(60);
+    final seconds = duration.inSeconds.remainder(60);
+
+    if (hours > 0) {
+      return '${hours.toString().padLeft(2, '0')}:'
+          '${minutes.toString().padLeft(2, '0')}:'
+          '${seconds.toString().padLeft(2, '0')}';
+    } else {
+      return '${minutes.toString().padLeft(2, '0')}:'
+          '${seconds.toString().padLeft(2, '0')}';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Text(
-      _countdownText,
-      style: const TextStyle(
-        fontSize: 32,
+      _formatDuration(_timeRemaining),
+      style: theme.textTheme.displayMedium?.copyWith(
         fontWeight: FontWeight.bold,
+        color: theme.colorScheme.primary,
       ),
     );
   }

@@ -1,23 +1,26 @@
 class StationSchedule {
+  final int stationNumber;
   final String stationName;
-  final Map<String, List<String>> weekdays;
-  final Map<String, List<String>> weekends;
+  final Map<String, Map<String, List<String>>> schedule;
 
   StationSchedule({
+    required this.stationNumber,
     required this.stationName,
-    required this.weekdays,
-    required this.weekends,
+    required this.schedule,
   });
 
-  factory StationSchedule.fromJson(String name, Map<String, dynamic> json) {
+  factory StationSchedule.fromJson(int stationNumber, Map<String, dynamic> json) {
     return StationSchedule(
-      stationName: name,
-      weekdays: _convertScheduleMap(json['weekdays']),
-      weekends: _convertScheduleMap(json['weekends']),
+      stationName: json['name'] as String,
+      stationNumber: stationNumber,
+      schedule: {
+        'weekday': _convertDirectionMap(json['schedule']['weekday']),
+        'weekend': _convertDirectionMap(json['schedule']['weekend']),
+      },
     );
   }
 
-  static Map<String, List<String>> _convertScheduleMap(dynamic data) {
+  static Map<String, List<String>> _convertDirectionMap(dynamic data) {
     if (data is! Map<String, dynamic>) return {};
 
     final Map<String, List<String>> result = {};
@@ -27,5 +30,10 @@ class StationSchedule {
       }
     });
     return result;
+  }
+
+  List<String>? getSchedule(bool isWeekend, String direction) {
+    final dayType = isWeekend ? 'weekend' : 'weekday';
+    return schedule[dayType]?[direction];
   }
 }
