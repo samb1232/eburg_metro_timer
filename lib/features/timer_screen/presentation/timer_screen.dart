@@ -14,7 +14,6 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -36,7 +35,9 @@ class _TimerScreenState extends State<TimerScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ChosenStationDisplay(
-              stationName: scheduleProvider.getStationName(scheduleProvider.selectedStationNumber),
+              stationName: scheduleProvider.getStationName(
+                scheduleProvider.selectedStationNumber,
+              ),
             ),
             const SizedBox(height: 20),
             TimerDisplay(),
