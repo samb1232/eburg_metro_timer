@@ -19,7 +19,7 @@ class NextTrainTimeDisplay extends StatelessWidget {
       return Text(
         'Нет данных о расписании',
         style: textTheme.bodyMedium?.copyWith(
-          color: colorScheme.onSurface.withOpacity(0.6),
+          color: colorScheme.onSurface,
         ),
       );
     }
@@ -35,7 +35,7 @@ class NextTrainTimeDisplay extends StatelessWidget {
       return Text(
         'Поездов сегодня больше нет',
         style: textTheme.bodyMedium?.copyWith(
-          color: colorScheme.onSurface.withOpacity(0.6),
+          color: colorScheme.onSurface,
         ),
       );
     }
