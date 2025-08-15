@@ -7,38 +7,61 @@ class DirectionButton extends StatelessWidget {
   final String label;
   final ScheduleProvider provider;
 
-  const DirectionButton({super.key,
+  const DirectionButton({
+    super.key,
     required this.direction,
     required this.label,
     required this.provider,
   });
 
   bool get isActive => provider.selectedDirection == direction;
-
   bool get isEnabled => provider.isDirectionAvailable(direction);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-    return GestureDetector(
-      onTap: (!isActive && isEnabled) ? () => provider.selectDirection(direction) : null,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isActive ? theme.colorScheme.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          label,
-          style: theme.textTheme.labelLarge?.copyWith(
+    return Semantics(
+      button: true,
+      enabled: isEnabled,
+      selected: isActive,
+      child: InkWell(
+        borderRadius: BorderRadius.zero,
+        onTap: isEnabled ? () => provider.selectDirection(direction) : null,
+        highlightColor: Colors.transparent, // Убираем эффект highlight
+        splashColor: Colors.transparent, // Убираем эффект splash
+        hoverColor: Colors.transparent, // Убираем эффект при наведении
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOutCubic,
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
             color: isActive
-                ? theme.colorScheme.onPrimary
-                : isEnabled
-                ? theme.colorScheme.onSurfaceVariant
-                : theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                ? colorScheme.primary.withOpacity(0.12)
+                : Colors.transparent,
+            border: Border(
+              bottom: BorderSide(
+                color: isActive
+                    ? colorScheme.primary
+                    : colorScheme.outlineVariant.withOpacity(0.3),
+                width: 2.0,
+              ),
+            ),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: textTheme.titleMedium?.copyWith(
+                color: isActive
+                    ? colorScheme.primary
+                    : isEnabled
+                    ? colorScheme.onSurface
+                    : colorScheme.onSurface.withOpacity(0.38),
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.2,
+              ),
+            ),
           ),
         ),
       ),
