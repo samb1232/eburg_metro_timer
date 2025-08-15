@@ -22,7 +22,7 @@ class _TimerScreenState extends State<TimerScreen> {
         context,
         listen: false,
       );
-      scheduleProvider.loadSchedules();
+      scheduleProvider.loadSchedulesAndUserStation();
     });
   }
 

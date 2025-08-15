@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:metro_schedule/core/data_saver.dart';
 import '../../data/models/direction.dart';
 import '../../data/models/station_schedule.dart';
 import '../../data/repositories/schedule_repository.dart';
-
 
 class ScheduleProvider with ChangeNotifier {
   final ScheduleRepository _repository;
@@ -26,6 +26,11 @@ class ScheduleProvider with ChangeNotifier {
   List<int> _stationOrder = [];
   List<int> get stationOrder => _stationOrder;
 
+  Future<void> loadSchedulesAndUserStation() async {
+    await loadSchedules();
+    await loadUserCurrentStation();
+  }
+
   Future<void> loadSchedules() async {
     if (_isLoading) return;
 
@@ -47,6 +52,22 @@ class ScheduleProvider with ChangeNotifier {
     }
   }
 
+  Future<void> loadUserCurrentStation() async {
+    final userPrefJson = await DataSaver.loadData();
+    final newDirection = userPrefJson?["direction_is_to_last"]
+        ? Direction.toLast
+        : Direction.toFirst;
+    selectStation(userPrefJson?["station_id"]);
+    selectDirection(newDirection);
+  }
+
+  Future<void> saveUserCurrentStation() async {
+    await DataSaver.saveData(
+      stationId: _selectedStationNumber,
+      directionIsToLast: _selectedDirection == Direction.toLast,
+    );
+  }
+
   void selectStation(int stationNumber) {
     _selectedStationNumber = stationNumber;
 
@@ -57,6 +78,7 @@ class ScheduleProvider with ChangeNotifier {
     }
 
     notifyListeners();
+    saveUserCurrentStation();
   }
 
   bool isDirectionAvailable(Direction direction) {
@@ -76,6 +98,7 @@ class ScheduleProvider with ChangeNotifier {
 
     _selectedDirection = direction;
     notifyListeners();
+    saveUserCurrentStation();
   }
 
   String getStationName(int stationNumber) {
