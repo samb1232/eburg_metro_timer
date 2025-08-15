@@ -8,15 +8,19 @@ class NextTrainTimeDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheduleProvider = Provider.of<ScheduleProvider>(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final isWeekend = DateTime.now().weekday == DateTime.saturday ||
         DateTime.now().weekday == DateTime.sunday;
 
     final schedule = scheduleProvider.getCurrentSchedule(isWeekend);
 
     if (schedule == null || schedule.isEmpty) {
-      return const Text(
+      return Text(
         'Нет данных о расписании',
-        style: TextStyle(fontSize: 16, color: Colors.grey),
+        style: textTheme.bodyMedium?.copyWith(
+          color: colorScheme.onSurface.withOpacity(0.6),
+        ),
       );
     }
 
@@ -25,6 +29,34 @@ class NextTrainTimeDisplay extends StatelessWidget {
     final currentMinutes = now.hour * 60 + now.minute;
 
     // Находим ближайшие три поезда
+    final upcomingTrains = _getUpcomingTrains(schedule, currentMinutes);
+
+    if (upcomingTrains.isEmpty) {
+      return Text(
+        'Поездов сегодня больше нет',
+        style: textTheme.bodyMedium?.copyWith(
+          color: colorScheme.onSurface.withOpacity(0.6),
+        ),
+      );
+    }
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: 'Следующий поезд: ${upcomingTrains.join(', ')}',
+            style: textTheme.bodyLarge?.copyWith(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w500,
+                fontSize: 18
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<String> _getUpcomingTrains(List<String> schedule, int currentMinutes) {
     final upcomingTrains = schedule
         .map((timeStr) {
       final parts = timeStr.split(':');
@@ -41,14 +73,6 @@ class NextTrainTimeDisplay extends StatelessWidget {
     })
         .toList();
 
-    if (upcomingTrains.isEmpty) {
-      return const Text(
-        'Поездов сегодня больше нет',
-        style: TextStyle(fontSize: 16, color: Colors.grey),
-      );
-    }
-
-    // Если ближайших поездов меньше 3, добавляем оставшиеся с начала следующего дня
     if (upcomingTrains.length < 3) {
       final remaining = 3 - upcomingTrains.length;
       final nextDayTrains = schedule
@@ -65,13 +89,9 @@ class NextTrainTimeDisplay extends StatelessWidget {
         return '$hour:$minute';
       })
           .toList();
-
       upcomingTrains.addAll(nextDayTrains);
     }
 
-    return Text(
-      'Следующий поезд: ${upcomingTrains.join(', ')}',
-      style: Theme.of(context).textTheme.bodyLarge,
-    );
+    return upcomingTrains;
   }
 }
