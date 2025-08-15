@@ -6,106 +6,41 @@ class AppTheme {
     primarySwatch: Colors.blue,
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: const AppBarTheme(
-      color: Colors.blue,
-      titleTextStyle: TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-      iconTheme: IconThemeData(color: Colors.white),
+      color: Color(0xFF1976D2), // Насыщенный синий
     ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
-        fontSize: 72,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      ),
-      headlineSmall: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w500,
-        color: Colors.black87,
-      ),
-      titleLarge: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-        color: Colors.black87,
-      ),
-      bodyLarge: TextStyle(
-        fontSize: 16,
-        color: Colors.black87,
-      ),
-    ),
-    iconTheme: const IconThemeData(
-      color: Colors.blue,
-    ),
-    cardTheme: CardThemeData(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      color: Colors.white,
-      margin: EdgeInsets.zero,
+    colorScheme: const ColorScheme.light(
+      primary: Color(0xFF1976D2), // Основной цвет (кнопки, акценты)
+      secondary: Color(0xFF90CAF9), // Вторичный цвет (фоновые элементы)
+      surface: Colors.white, // Фон карточек и контейнеров
+      onPrimary: Colors.white, // Текст на основном цвете
+      onSecondary: Colors.black, // Текст на вторичном цвете
+      onSurface: Colors.black87, // Основной текст
     ),
   );
-
 
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.blueGrey,
-    scaffoldBackgroundColor: Colors.grey[900],
-    appBarTheme: AppBarTheme(
-      color: Colors.grey[850],
-      titleTextStyle: const TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-      iconTheme: const IconThemeData(color: Colors.white),
+    scaffoldBackgroundColor: const Color(0xFF121212),
+    appBarTheme: const AppBarTheme(
+      color: Color(0xFF1E1E1E), // Тёмно-серый для AppBar
     ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
-        fontSize: 72,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-      headlineSmall: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w500,
-        color: Colors.white,
-      ),
-      titleLarge: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-        color: Colors.white,
-      ),
-      bodyLarge: TextStyle(
-        fontSize: 16,
-        color: Colors.white70,
-      ),
-    ),
-    iconTheme: const IconThemeData(
-      color: Colors.blueGrey,
-    ),
-    cardTheme: CardThemeData(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      color: Colors.grey[800],
-      margin: EdgeInsets.zero,
+    colorScheme: const ColorScheme.dark(
+      primary: Color(0xFF4FC3F7), // Светло-голубой для акцентов
+      secondary: Color(0xFF26C6DA), // Вторичный цвет (например, для иконок)
+      surface: Color(0xFF1E1E1E), // Фон карточек
+      onPrimary: Colors.black, // Текст на основном цвете
+      onSecondary: Colors.black, // Текст на вторичном цвете
+      onSurface: Colors.white70, // Основной текст
     ),
   );
 
-  // Дополнительные стили
-  static TextStyle get timerTextStyle => const TextStyle(
-    fontSize: 64,
-    fontWeight: FontWeight.bold,
-  );
-
-  static TextStyle get stationNameStyle => const TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-  );
-
-  static Color get primaryColor => Colors.blue;
+  static const Color lightPrimaryColor = Color(0xFF1976D2);
+  static const Color darkPrimaryColor = Color(0xFF4FC3F7);
+  static const Color lightSurfaceColor = Colors.white;
+  static const Color darkSurfaceColor = Color(0xFF1E1E1E);
+  static const Color lightBackgroundColor = Colors.white;
+  static const Color darkBackgroundColor = Color(0xFF121212);
+  static const Color lightOnSurfaceColor = Colors.black87;
+  static const Color darkOnSurfaceColor = Colors.white70;
 }
