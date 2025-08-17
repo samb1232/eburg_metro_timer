@@ -36,9 +36,7 @@ class _ChosenStationDisplayState extends State<ChosenStationDisplay> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 20),
               decoration: BoxDecoration(
-                color: _isPressed
-                    ? colorScheme.primary.withValues(alpha: 0.1)
-                    : colorScheme.surface,
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
