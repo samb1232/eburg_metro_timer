@@ -4,43 +4,37 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: const Color(0xFFF8F9FA),
     appBarTheme: const AppBarTheme(
-      color: Color(0xFF1976D2), // Насыщенный синий
+      color: Color(0xFF3F51B5),
+      elevation: 0,
     ),
     colorScheme: const ColorScheme.light(
-      primary: Color(0xFF1976D2), // Основной цвет (кнопки, акценты)
-      secondary: Color(0xFF90CAF9), // Вторичный цвет (фоновые элементы)
-      surface: Colors.white, // Фон карточек и контейнеров
-      onPrimary: Colors.white, // Текст на основном цвете
-      onSecondary: Colors.black, // Текст на вторичном цвете
-      onSurface: Colors.black87, // Основной текст
-    ),
+      primary: Color(0xFF3F51B5),
+      secondary: Color(0xFF7986CB),
+      surface: Colors.white,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onSurface: Color(0xFF212121),
+    )
   );
+
 
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.blueGrey,
     scaffoldBackgroundColor: const Color(0xFF121212),
     appBarTheme: const AppBarTheme(
-      color: Color(0xFF1E1E1E), // Тёмно-серый для AppBar
+      color: Color(0xFF1E1E1E),
+      elevation: 0,
     ),
     colorScheme: const ColorScheme.dark(
-      primary: Color(0xFF4FC3F7), // Светло-голубой для акцентов
-      secondary: Color(0xFF26C6DA), // Вторичный цвет (например, для иконок)
-      surface: Color(0xFF1E1E1E), // Фон карточек
-      onPrimary: Colors.black, // Текст на основном цвете
-      onSecondary: Colors.black, // Текст на вторичном цвете
-      onSurface: Colors.white70, // Основной текст
+      primary: Color(0xFF64B5F6),
+      secondary: Color(0xFF42A5F5),
+      surface: Color(0xFF1E1E1E),
+      onPrimary: Colors.black,
+      onSecondary: Colors.black,
+      onSurface: Color(0xFFE0E0E0),
     ),
   );
-
-  static const Color lightPrimaryColor = Color(0xFF1976D2);
-  static const Color darkPrimaryColor = Color(0xFF4FC3F7);
-  static const Color lightSurfaceColor = Colors.white;
-  static const Color darkSurfaceColor = Color(0xFF1E1E1E);
-  static const Color lightBackgroundColor = Colors.white;
-  static const Color darkBackgroundColor = Color(0xFF121212);
-  static const Color lightOnSurfaceColor = Colors.black87;
-  static const Color darkOnSurfaceColor = Colors.white70;
 }
