@@ -126,7 +126,7 @@ class _TimerDisplayState extends State<TimerDisplay> {
             TextSpan(
               text: '$seconds',
               style: TextStyle(
-                fontSize: 48,
+                fontSize: 58,
                 fontWeight: FontWeight.bold,
                 color: colorScheme.primary,
               ),
