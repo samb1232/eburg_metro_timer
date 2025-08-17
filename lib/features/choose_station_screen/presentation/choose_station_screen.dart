@@ -81,7 +81,7 @@ class ChooseStationScreen extends StatelessWidget {
             provider.selectStation(stationNumber);
             Navigator.pop(context, stationName);
           },
-          tileColor: isSelected ? colorScheme.primary.withOpacity(0.1) : null,
+          tileColor: isSelected ? colorScheme.primary.withValues(alpha: 0.1) : null,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         );
       },

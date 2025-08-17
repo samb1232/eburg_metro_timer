@@ -40,7 +40,7 @@ class _TimerScreenState extends State<TimerScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            TimerDisplay(),
+            const TimerDisplay(),
             const NextTrainTimeDisplay(),
             const SizedBox(height: 100),
             const ChooseDirectionButtons(),

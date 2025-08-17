@@ -38,13 +38,13 @@ class DirectionButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
             color: isActive
-                ? colorScheme.primary.withOpacity(0.12)
-                : Colors.transparent,
+                ? colorScheme.primary.withValues(alpha: 0.12)
+        : Colors.transparent,
             border: Border(
               bottom: BorderSide(
                 color: isActive
                     ? colorScheme.primary
-                    : colorScheme.outlineVariant.withOpacity(0.3),
+                    : colorScheme.outlineVariant.withValues(alpha: 0.3),
                 width: 2.0,
               ),
             ),
@@ -57,7 +57,7 @@ class DirectionButton extends StatelessWidget {
                     ? colorScheme.primary
                     : isEnabled
                     ? colorScheme.onSurface
-                    : colorScheme.onSurface.withOpacity(0.38),
+                    : colorScheme.onSurface.withValues(alpha: 0.38),
                 fontWeight: FontWeight.w500,
                 letterSpacing: 0.2,
               ),
