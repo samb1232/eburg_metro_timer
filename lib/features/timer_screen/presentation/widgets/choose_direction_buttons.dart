@@ -10,27 +10,23 @@ class ChooseDirectionButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ScheduleProvider>(context);
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer, // Фон контейнера из темы
-        borderRadius: BorderRadius.circular(16), // Скругление углов контейнера
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Row(
         children: [
           Expanded(
             child: DirectionButton(
               direction: Direction.toFirst,
-              label: 'На Пр. Космонавтов',
+              label: 'Пр. Космонавтов',
               provider: provider,
             ),
           ),
+          const SizedBox(width: 1),
           Expanded(
             child: DirectionButton(
               direction: Direction.toLast,
-              label: 'На ботанику',
+              label: 'Ботаническая',
               provider: provider,
             ),
           ),

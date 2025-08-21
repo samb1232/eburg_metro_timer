@@ -15,6 +15,7 @@ class DirectionButton extends StatelessWidget {
   });
 
   bool get isActive => provider.selectedDirection == direction;
+
   bool get isEnabled => provider.isDirectionAvailable(direction);
 
   @override
@@ -26,40 +27,40 @@ class DirectionButton extends StatelessWidget {
       button: true,
       enabled: isEnabled,
       selected: isActive,
-      child: InkWell(
-        borderRadius: BorderRadius.zero,
-        onTap: isEnabled ? () => provider.selectDirection(direction) : null,
-        highlightColor: Colors.transparent, // Убираем эффект highlight
-        splashColor: Colors.transparent, // Убираем эффект splash
-        hoverColor: Colors.transparent, // Убираем эффект при наведении
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOutCubic,
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-            color: isActive
-                ? colorScheme.primary.withValues(alpha: 0.12)
-        : Colors.transparent,
-            border: Border(
-              bottom: BorderSide(
-                color: isActive
-                    ? colorScheme.primary
-                    : colorScheme.outlineVariant.withValues(alpha: 0.3),
-                width: 2.0,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isEnabled ? () => provider.selectDirection(direction) : null,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: isActive
+                      ? colorScheme.primary
+                      : colorScheme.outlineVariant.withValues(alpha: 0.3),
+                  width: 2.0,
+                ),
               ),
             ),
-          ),
-          child: Center(
-            child: Text(
-              label,
-              style: textTheme.titleMedium?.copyWith(
-                color: isActive
-                    ? colorScheme.primary
-                    : isEnabled
-                    ? colorScheme.onSurface
-                    : colorScheme.onSurface.withValues(alpha: 0.38),
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.2,
+            child: Center(
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: textTheme.titleMedium?.copyWith(
+                  color: isActive
+                      ? colorScheme.primary
+                      : isEnabled
+                      ? colorScheme.onSurface
+                      : colorScheme.onSurface.withValues(alpha: 0.3),
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  fontSize: 14,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
