@@ -4,108 +4,37 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: const Color(0xFFF8F9FA),
     appBarTheme: const AppBarTheme(
-      color: Colors.blue,
-      titleTextStyle: TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-      iconTheme: IconThemeData(color: Colors.white),
+      color: Color(0xFF3F51B5),
+      elevation: 0,
     ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
-        fontSize: 72,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      ),
-      headlineSmall: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w500,
-        color: Colors.black87,
-      ),
-      titleLarge: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-        color: Colors.black87,
-      ),
-      bodyLarge: TextStyle(
-        fontSize: 16,
-        color: Colors.black87,
-      ),
-    ),
-    iconTheme: const IconThemeData(
-      color: Colors.blue,
-    ),
-    cardTheme: CardThemeData(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      color: Colors.white,
-      margin: EdgeInsets.zero,
-    ),
+    colorScheme: const ColorScheme.light(
+      primary: Color(0xFF3F51B5),
+      secondary: Color(0xFF7986CB),
+      surface: Colors.white,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onSurface: Color(0xFF212121),
+    )
   );
 
 
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.blueGrey,
-    scaffoldBackgroundColor: Colors.grey[900],
-    appBarTheme: AppBarTheme(
-      color: Colors.grey[850],
-      titleTextStyle: const TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-      iconTheme: const IconThemeData(color: Colors.white),
+    scaffoldBackgroundColor: const Color(0xFF121212),
+    appBarTheme: const AppBarTheme(
+      color: Color(0xFF1E1E1E),
+      elevation: 0,
     ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
-        fontSize: 72,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-      headlineSmall: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w500,
-        color: Colors.white,
-      ),
-      titleLarge: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-        color: Colors.white,
-      ),
-      bodyLarge: TextStyle(
-        fontSize: 16,
-        color: Colors.white70,
-      ),
-    ),
-    iconTheme: const IconThemeData(
-      color: Colors.blueGrey,
-    ),
-    cardTheme: CardThemeData(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      color: Colors.grey[800],
-      margin: EdgeInsets.zero,
+    colorScheme: const ColorScheme.dark(
+      primary: Color(0xFF64B5F6),
+      secondary: Color(0xFF42A5F5),
+      surface: Color(0xFF1E1E1E),
+      onPrimary: Colors.black,
+      onSecondary: Colors.black,
+      onSurface: Color(0xFFE0E0E0),
     ),
   );
-
-  // Дополнительные стили
-  static TextStyle get timerTextStyle => const TextStyle(
-    fontSize: 64,
-    fontWeight: FontWeight.bold,
-  );
-
-  static TextStyle get stationNameStyle => const TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-  );
-
-  static Color get primaryColor => Colors.blue;
 }

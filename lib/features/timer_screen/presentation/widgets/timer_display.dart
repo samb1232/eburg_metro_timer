@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:metro_schedule/core/providers/schedule_provider.dart';
-import 'package:metro_schedule/data/models/direction.dart';
 import 'package:provider/provider.dart';
-
 
 class TimerDisplay extends StatefulWidget {
   const TimerDisplay({super.key});
@@ -31,7 +29,6 @@ class _TimerDisplayState extends State<TimerDisplay> {
 
   void _updateTime() {
     final provider = Provider.of<ScheduleProvider>(context, listen: false);
-
     if (provider.stationOrder.isEmpty || provider.schedules.isEmpty) {
       return;
     }
@@ -39,7 +36,6 @@ class _TimerDisplayState extends State<TimerDisplay> {
     final now = DateTime.now();
     final isWeekend = now.weekday >= DateTime.saturday;
     final station = provider.schedules[provider.selectedStationNumber];
-
     if (station == null) return;
 
     final direction = provider.selectedDirection.value;
@@ -69,8 +65,8 @@ class _TimerDisplayState extends State<TimerDisplay> {
       final timeParts = nextTime.split(':');
       final hour = int.tryParse(timeParts[0]) ?? 0;
       final minute = int.tryParse(timeParts[1]) ?? 0;
-
       var trainTime = DateTime(now.year, now.month, now.day, hour, minute);
+
       if (trainTime.isBefore(now)) {
         trainTime = trainTime.add(const Duration(days: 1));
       }
@@ -81,31 +77,83 @@ class _TimerDisplayState extends State<TimerDisplay> {
     }
   }
 
-  String _formatDuration(Duration duration) {
-    final hours = duration.inHours;
+  Widget _buildFormattedTimer(Duration duration, ColorScheme colorScheme) {
     final minutes = duration.inMinutes.remainder(60);
     final seconds = duration.inSeconds.remainder(60);
 
-    if (hours > 0) {
-      return '${hours.toString().padLeft(2, '0')}:'
-          '${minutes.toString().padLeft(2, '0')}:'
-          '${seconds.toString().padLeft(2, '0')}';
-    } else {
-      return '${minutes.toString().padLeft(2, '0')}:'
-          '${seconds.toString().padLeft(2, '0')}';
+    if (minutes == 0) {
+      return RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: '$seconds',
+              style: TextStyle(
+                fontSize: 58,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.primary,
+              ),
+            ),
+            TextSpan(
+              text: 'сек',
+              style: TextStyle(
+                fontSize: 24,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    else {
+      return RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: '$minutes',
+              style: TextStyle(
+                fontSize: 58,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.primary,
+              ),
+            ),
+            TextSpan(
+              text: 'мин',
+              style: TextStyle(
+                fontSize: 24,
+                color: colorScheme.onSurface,
+              ),
+            ),
+            TextSpan(
+              text: '$seconds',
+              style: TextStyle(
+                fontSize: 58,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.primary,
+              ),
+            ),
+            TextSpan(
+              text: 'сек',
+              style: TextStyle(
+                fontSize: 24,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
-    return Text(
-      _formatDuration(_timeRemaining),
-      style: theme.textTheme.displayMedium?.copyWith(
-        fontWeight: FontWeight.bold,
-        color: theme.colorScheme.primary,
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildFormattedTimer(_timeRemaining, colorScheme),
+      ],
     );
   }
 }

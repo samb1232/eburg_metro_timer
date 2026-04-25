@@ -7,7 +7,8 @@ class DirectionButton extends StatelessWidget {
   final String label;
   final ScheduleProvider provider;
 
-  const DirectionButton({super.key,
+  const DirectionButton({
+    super.key,
     required this.direction,
     required this.label,
     required this.provider,
@@ -19,26 +20,49 @@ class DirectionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-    return GestureDetector(
-      onTap: (!isActive && isEnabled) ? () => provider.selectDirection(direction) : null,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isActive ? theme.colorScheme.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          label,
-          style: theme.textTheme.labelLarge?.copyWith(
-            color: isActive
-                ? theme.colorScheme.onPrimary
-                : isEnabled
-                ? theme.colorScheme.onSurfaceVariant
-                : theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+    return Semantics(
+      button: true,
+      enabled: isEnabled,
+      selected: isActive,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isEnabled ? () => provider.selectDirection(direction) : null,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: isActive
+                      ? colorScheme.primary
+                      : colorScheme.outlineVariant.withValues(alpha: 0.3),
+                  width: 2.0,
+                ),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: textTheme.titleMedium?.copyWith(
+                  color: isActive
+                      ? colorScheme.primary
+                      : isEnabled
+                      ? colorScheme.onSurface
+                      : colorScheme.onSurface.withValues(alpha: 0.3),
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  fontSize: 14,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
         ),
       ),

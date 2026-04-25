@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:metro_schedule/core/providers/schedule_provider.dart';
 import 'package:metro_schedule/data/models/direction.dart';
 import 'package:provider/provider.dart';
-
 import 'direction_button.dart';
 
 class ChooseDirectionButtons extends StatelessWidget {
@@ -11,27 +10,25 @@ class ChooseDirectionButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ScheduleProvider>(context);
-    final theme = Theme.of(context);
 
     return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(4),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          DirectionButton(
-            direction: Direction.toFirst,
-            label: 'На Пр. Космонавтов',
-            provider: provider,
+          Expanded(
+            child: DirectionButton(
+              direction: Direction.toFirst,
+              label: 'Пр. Космонавтов',
+              provider: provider,
+            ),
           ),
-          const SizedBox(width: 4),
-          DirectionButton(
-            direction: Direction.toLast,
-            label: 'На ботанику',
-            provider: provider,
+          const SizedBox(width: 1),
+          Expanded(
+            child: DirectionButton(
+              direction: Direction.toLast,
+              label: 'Ботаническая',
+              provider: provider,
+            ),
           ),
         ],
       ),
